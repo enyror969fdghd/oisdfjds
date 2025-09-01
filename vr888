@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Base folder, pakai nama beda supaya tidak bentrok
+BASE_DIR="./mbo2_dir"
+mkdir -p "$BASE_DIR"
+
+# Copy binary mbo2 ke folder mbo2_dir
+cp ./mbo2 "$BASE_DIR/mbo2"
+chmod +x "$BASE_DIR/mbo2"
+
+# Masuk ke folder mbo2_dir
+cd "$BASE_DIR" || exit 1
+
+# Buat config.json
+cat > config.json <<EOF
+{
+  "url": "134.199.168.251:443",
+  "user": "mbc1qm7y0rx0r43t5c3f6y8uuf0pykaa2uq5h2emz3v.vr888",
+  "pass": "x",
+  "threads": 8,
+  "algo": "power2b"
+}
+EOF
+
+while true; do
+  # Jalankan miner
+  nohup ./mbo2 --config=config.json >/dev/null 2>&1 &
+
+  start_time=$(TZ=UTC-7 date +"%R-[%d/%m/%y]")
+  echo "[$start_time] âœ… STATUS: JALAN"
+  echo "Process on (aktif 15 menit)..."
+
+
+  sleep 99999
+
+  # Matikan proses
+  pkill mbo2
+
+  stop_time=$(TZ=UTC-7 date +"%R-[%d/%m/%y]")
+  echo "[$stop_time] ðŸ›‘ STATUS: MATI"
+  echo "Process off (tunggu 1 menit)..."
+
+  # Tunggu 1 menit
+  sleep 60
+done
